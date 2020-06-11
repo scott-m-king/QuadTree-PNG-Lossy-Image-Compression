@@ -23,7 +23,7 @@ long stats::rectArea(int dim) {
 
 // given a rectangle, compute its sum of squared deviations from mean, over all color channels.
 // see written specification for a description of this function.
-long stats::getVar(pair<int,int> ul, int dim){
+double stats::getVar(pair<int,int> ul, int dim){
 /* Your code here!! */
 
 }

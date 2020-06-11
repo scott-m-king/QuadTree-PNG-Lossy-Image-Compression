@@ -178,7 +178,7 @@ TEST_CASE("qtvar::basic idealPrune","[weight=1][part=qtvar]"){
     qtvar t1(img); 
     int result = t1.idealPrune(13904);
 
-    int expected = 3866;
+    int expected = 3865;
 
     REQUIRE(expected==result);
 }
