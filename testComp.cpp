@@ -68,8 +68,13 @@ TEST_CASE("stats::basic variance","[weight=1][part=stats]"){
             p->g = 3 * i + 20 * j;
             p->b = 23 * i + 23 * j;
             p->a = 1.0;
+            // std::cout << "i: " << i << ", j: " << j << std::endl;
+            // std::cout << "red: " << (int) p->r << std::endl;
+            // std::cout << "green: " << (int) p->g << std::endl;
+            // std::cout << "blue: " << (int) p->b << std::endl;
         }
     }
+
     stats s(data);
     pair<int,int> ul(0,0);
     long result = s.getVar(ul,1);
