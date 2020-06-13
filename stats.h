@@ -49,7 +49,7 @@ public:
 	// given a square, compute its sum of squared deviations from mean, over all color channels.
 	/* @param ul is (x,y) of the upper left corner of the square 
 	* @param dim is log of side length of the square*/
-	long getVar(pair<int,int> ul, int dim);
+	double getVar(pair<int,int> ul, int dim);
 
 	// given a square, return the average color value over the square as a pixel.
 	/* Each color component of the pixel is the average value of that component over
