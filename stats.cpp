@@ -13,50 +13,14 @@ stats::stats(PNG & im){
   sumsqGreen.resize(im.width());
   sumsqBlue.resize(im.width());
 
-  int redSum = 0;
-  int greenSum = 0;
-  int blueSum = 0;
-  int redSumSq = 0;
-  int greenSumSq = 0;
-  int blueSumSq = 0;
-
   for (int row = 0; row < (int) im.width(); row++) {
-    redSum += im.getPixel(row, 0)->r;
-    greenSum += im.getPixel(row, 0)->g;
-    blueSum += im.getPixel(row, 0)->b;
-    redSumSq += pow(redSum,2);
-    greenSumSq += pow(greenSum,2);
-    blueSumSq += pow(blueSum,2);
-
-    sumRed[row].push_back(redSum);
-    sumGreen[row].push_back(greenSum);
-    sumBlue[row].push_back(blueSum);
-    sumsqRed[row].push_back(redSumSq);
-    sumsqGreen[row].push_back(greenSumSq);
-    sumsqBlue[row].push_back(blueSumSq);
+    populateEdges(row, 0, im);
   }
 
-  redSum = 0;
-  greenSum = 0;
-  blueSum = 0;
-  redSumSq = 0;
-  greenSumSq = 0;
-  blueSumSq = 0;
+  clearAccumulators();
 
   for (int col = 1; col < (int) im.height(); col++) {
-    redSum += im.getPixel(0, col)->r;
-    greenSum += im.getPixel(0, col)->g;
-    blueSum += im.getPixel(0, col)->b;
-    redSumSq += pow(redSum,2);
-    greenSumSq += pow(greenSum,2);
-    blueSumSq += pow(blueSum,2);
-
-    sumRed[0].push_back(redSum);
-    sumGreen[0].push_back(greenSum);
-    sumBlue[0].push_back(blueSum);
-    sumsqRed[0].push_back(redSumSq);
-    sumsqGreen[0].push_back(greenSumSq);
-    sumsqBlue[0].push_back(blueSumSq);
+    populateEdges(0, col, im);
   }
 
   for (int row = 1; row < (int) im.width(); row++) {
@@ -72,6 +36,31 @@ stats::stats(PNG & im){
       sumsqBlue[row].push_back(sumsqBlue[row][col-1] + sumsqBlue[row-1][col] + pow(blue,2));
     }
   }
+}
+
+void stats::populateEdges (int row, int col, PNG& im) {
+    redSum += im.getPixel(row, col)->r;
+    greenSum += im.getPixel(row, col)->g;
+    blueSum += im.getPixel(row, col)->b;
+    redSumSq += pow(redSum,2);
+    greenSumSq += pow(greenSum,2);
+    blueSumSq += pow(blueSum,2);
+
+    sumRed[row].push_back(redSum);
+    sumGreen[row].push_back(greenSum);
+    sumBlue[row].push_back(blueSum);
+    sumsqRed[row].push_back(redSumSq);
+    sumsqGreen[row].push_back(greenSumSq);
+    sumsqBlue[row].push_back(blueSumSq);
+}
+
+void stats::clearAccumulators() {
+  redSum = 0;
+  greenSum = 0;
+  blueSum = 0;
+  redSumSq = 0;
+  greenSumSq = 0;
+  blueSumSq = 0;
 }
 
 long stats::getSum(char channel, pair<int,int> ul, int dim){
@@ -107,6 +96,7 @@ double stats::getVar(pair<int,int> ul, int dim){
   long red = getSumSq('r', ul, dim) - (pow(getSum('r', ul, dim),2) / rectArea(dim));
   long green = getSumSq('g', ul, dim) - (pow(getSum('g', ul, dim),2) / rectArea(dim));
   long blue = getSumSq('b', ul, dim) - (pow(getSum('b', ul, dim),2) / rectArea(dim));
+
   return red + green + blue;
 }
 		

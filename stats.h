@@ -39,12 +39,21 @@ public:
 	long getSumSq(char channel, pair<int,int> ul, int dim);
 
 public:
+	int redSum = 0;
+  int greenSum = 0;
+  int blueSum = 0;
+  int redSumSq = 0;
+  int greenSumSq = 0;
+  int blueSumSq = 0;
 
 	// initialize the private vectors so that, for each color,  entry 
 	// (x,y) is the cumulative sum of the the color values from (0,0)
 	// to (x,y). Similarly, the sumSq vectors are the cumulative
 	// sum of squares from (0,0) to (x,y).
 	stats(PNG & im); 
+
+	void populateEdges (int row, int col, PNG& im);
+	void clearAccumulators();
 
 	// given a square, compute its sum of squared deviations from mean, over all color channels.
 	/* @param ul is (x,y) of the upper left corner of the square 
