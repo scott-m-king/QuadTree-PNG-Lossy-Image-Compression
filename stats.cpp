@@ -23,17 +23,25 @@ stats::stats(PNG & im){
       long red = im.getPixel(row, col)->r;
       long green = im.getPixel(row, col)->g;
       long blue = im.getPixel(row, col)->b;
-      sumRed[row].push_back(sumRed[row][col-1] + sumRed[row-1][col] + red);
-      sumGreen[row].push_back(sumGreen[row][col-1] + sumGreen[row-1][col] + green);
-      sumBlue[row].push_back(sumBlue[row][col-1] + sumBlue[row-1][col] + blue);
-      sumsqRed[row].push_back(sumsqRed[row][col-1] + sumsqRed[row-1][col] + pow(red,2));
-      sumsqGreen[row].push_back(sumsqGreen[row][col-1] + sumsqGreen[row-1][col] + pow(green,2));
-      sumsqBlue[row].push_back(sumsqBlue[row][col-1] + sumsqBlue[row-1][col] + pow(blue,2));
+
+      sumRed[row].push_back(sumRed[row][col-1] + sumRed[row-1][col] - sumRed[row-1][col-1] + red);
+      sumGreen[row].push_back(sumGreen[row][col-1] + sumGreen[row-1][col] - sumGreen[row-1][col-1] + green);
+      sumBlue[row].push_back(sumBlue[row][col-1] + sumBlue[row-1][col] - sumBlue[row-1][col-1] + blue);
+
+      sumsqRed[row].push_back(sumsqRed[row][col-1] + sumsqRed[row-1][col] - sumsqRed[row-1][col-1] + pow(red,2));
+      sumsqGreen[row].push_back(sumsqGreen[row][col-1] + sumsqGreen[row-1][col] - sumsqGreen[row-1][col-1] + pow(green,2));
+      sumsqBlue[row].push_back(sumsqBlue[row][col-1] + sumsqBlue[row-1][col] - sumsqBlue[row-1][col-1] + pow(blue,2));
     }
   }
 }
 
 void stats::setVectorDimensions(PNG& im) {
+  sumRed.clear();
+  sumGreen.clear();
+  sumBlue.clear();
+  sumsqRed.clear();
+  sumsqGreen.clear();
+  sumBlue.clear();
   sumRed.resize(im.width());
   sumGreen.resize(im.width());
   sumBlue.resize(im.width());
@@ -69,33 +77,39 @@ void stats::clearAccumulators() {
 
 long stats::getSum(char channel, pair<int,int> ul, int dim){
   switch(channel) {
-    case 'r':
-      return sumRed[ul.first+dim][ul.second+dim];
-    case 'g':
-      return sumGreen[ul.first+dim][ul.second+dim];
-    case 'b':
-      return sumBlue[ul.first+dim][ul.second+dim];
-    default:
-      return -1;
+    case 'r': return getSumHelper(sumRed, ul, dim);
+    case 'g': return getSumHelper(sumGreen, ul, dim);
+    case 'b': return getSumHelper(sumBlue, ul, dim);
+    default:  return -1;
   }
 }
 
 long stats::getSumSq(char channel, pair<int,int> ul, int dim){
   switch(channel) {
-    case 'r':
-      return sumsqRed[ul.first+dim][ul.second+dim];
-    case 'g':
-      return sumsqGreen[ul.first+dim][ul.second+dim];
-    case 'b':
-      return sumsqBlue[ul.first+dim][ul.second+dim];
-    default:
-      return -1;
+    case 'r': return getSumHelper(sumsqRed, ul, dim);
+    case 'g': return getSumHelper(sumsqGreen, ul, dim);
+    case 'b': return getSumHelper(sumsqBlue, ul, dim);
+    default:  return -1;
   }
 }
 
-// SK Comment: Since the dim represents log base 2 of side length, to calculate total area is 2^(dim) * 2.
+long stats::getSumHelper(vector<vector<long>> sums, pair<int,int> ul, int dim) {
+  long leftSub = 0;
+  long upSub = 0; 
+  long cornerSub = 0;
+  long lr = sums[ul.first + pow(2,dim)-1][ul.second + pow(2,dim)-1];
+
+  if (ul.first != 0) upSub = sums[ul.first-1][ul.second];
+  if (ul.second != 0) leftSub = sums[ul.first][ul.second-1];
+  if (ul.first != 0 && ul.second != 0) cornerSub = sums[ul.first-1][ul.second-1];
+  
+  return lr - leftSub - upSub + cornerSub;
+}
+
+// Since the dim represents log base 2 of side length, 
+// to calculate total area is 2^(dim) * 2^(dim) = 4^(dim).
 long stats::rectArea(int dim) {
-  return pow(2, dim) * 2;
+  return pow(4, dim);
 }
 
 // given a rectangle, compute its sum of squared deviations from mean, over all color channels.
@@ -105,12 +119,13 @@ double stats::getVar(pair<int,int> ul, int dim){
   long green = getSumSq('g', ul, dim) - (pow(getSum('g', ul, dim),2) / rectArea(dim));
   long blue = getSumSq('b', ul, dim) - (pow(getSum('b', ul, dim),2) / rectArea(dim));
 
-  return red + green + blue;
+  return (double) red + green + blue;
 }
-		
+
 RGBAPixel stats::getAvg(pair<int,int> ul, int dim){
   long red = getSum('r', ul, dim) / rectArea(dim);
   long green = getSum('g', ul, dim) / rectArea(dim);
   long blue = getSum('b', ul, dim) / rectArea(dim);
+
   return RGBAPixel(red, green, blue);
 }
