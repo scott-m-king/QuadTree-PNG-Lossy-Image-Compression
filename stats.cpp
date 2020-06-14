@@ -6,12 +6,7 @@
 #define LOG(msg, var) std::cout << msg << var << std::endl
 
 stats::stats(PNG & im){
-  sumRed.resize(im.width());
-  sumGreen.resize(im.width());
-  sumBlue.resize(im.width());
-  sumsqRed.resize(im.width());
-  sumsqGreen.resize(im.width());
-  sumsqBlue.resize(im.width());
+  setVectorDimensions(im);
 
   for (int row = 0; row < (int) im.width(); row++) {
     populateEdges(row, 0, im);
@@ -36,6 +31,15 @@ stats::stats(PNG & im){
       sumsqBlue[row].push_back(sumsqBlue[row][col-1] + sumsqBlue[row-1][col] + pow(blue,2));
     }
   }
+}
+
+void stats::setVectorDimensions(PNG& im) {
+  sumRed.resize(im.width());
+  sumGreen.resize(im.width());
+  sumBlue.resize(im.width());
+  sumsqRed.resize(im.width());
+  sumsqGreen.resize(im.width());
+  sumsqBlue.resize(im.width());
 }
 
 void stats::populateEdges (int row, int col, PNG& im) {
@@ -71,6 +75,8 @@ long stats::getSum(char channel, pair<int,int> ul, int dim){
       return sumGreen[ul.first+dim][ul.second+dim];
     case 'b':
       return sumBlue[ul.first+dim][ul.second+dim];
+    default:
+      return -1;
   }
 }
 
@@ -82,6 +88,8 @@ long stats::getSumSq(char channel, pair<int,int> ul, int dim){
       return sumsqGreen[ul.first+dim][ul.second+dim];
     case 'b':
       return sumsqBlue[ul.first+dim][ul.second+dim];
+    default:
+      return -1;
   }
 }
 
@@ -101,6 +109,8 @@ double stats::getVar(pair<int,int> ul, int dim){
 }
 		
 RGBAPixel stats::getAvg(pair<int,int> ul, int dim){
-/* Your code here!! */
-  return RGBAPixel();
+  long red = getSum('r', ul, dim) / rectArea(dim);
+  long green = getSum('g', ul, dim) / rectArea(dim);
+  long blue = getSum('b', ul, dim) / rectArea(dim);
+  return RGBAPixel(red, green, blue);
 }

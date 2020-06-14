@@ -54,6 +54,7 @@ public:
 
 	void populateEdges (int row, int col, PNG& im);
 	void clearAccumulators();
+	void setVectorDimensions(PNG& im);
 
 	// given a square, compute its sum of squared deviations from mean, over all color channels.
 	/* @param ul is (x,y) of the upper left corner of the square 
