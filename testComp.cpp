@@ -74,6 +74,52 @@ TEST_CASE("stats::basic variance","[weight=1][part=stats]"){
     REQUIRE(result == 1876);
 }
 
+TEST_CASE("stats::basic variance two","[weight=1][part=stats]"){
+    PNG data; data.resize(2,2);
+    int counter = 1;
+
+    for (int i = 0; i < 2; i ++){
+        for (int j = 0; j < 2; j++){
+            RGBAPixel * p = data.getPixel(i,j);
+            p->r = 5 * counter;
+            p->g = 3 * counter;
+            p->b = 10 * counter;
+            p->a = 1.0;
+            counter++;
+        }
+    }
+
+    stats s(data);
+    pair<int,int> ul(0,0);
+    long result = s.getVar(ul,1);
+
+    REQUIRE(result == 670);
+}
+
+TEST_CASE("stats::basic variance three","[weight=1][part=stats]"){
+    PNG data; data.resize(4,4);
+    int counter = 1;
+
+    for (int i = 0; i < 4; i ++){
+        for (int j = 0; j < 4; j++){
+            RGBAPixel * p = data.getPixel(i,j);
+            p->r = 3 * counter;
+            p->g = 2 * counter;
+            p->b = 1 * counter;
+            p->a = 1.0;
+            
+            counter++;
+        }
+    }
+
+    stats s(data);
+    pair<int,int> ul(0,0);
+    long result = s.getVar(ul,2);
+
+    REQUIRE(result == 4760);
+}
+
+
 // TEST_CASE("qtcount::basic ctor render","[weight=1][part=qtcount]"){
 //     PNG img;
 //     img.readFromFile("images/orig/geo.png");

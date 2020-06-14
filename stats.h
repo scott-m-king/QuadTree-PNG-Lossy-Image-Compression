@@ -53,7 +53,7 @@ public:
 	stats(PNG & im); 
 
 	void populateEdges (int row, int col, PNG& im);
-	void clearAccumulators();
+	void setAccumulators();
 	void setVectorDimensions(PNG& im);
 	long getSumHelper(vector<vector<long>> sums, pair<int,int> ul, int dim);
 
