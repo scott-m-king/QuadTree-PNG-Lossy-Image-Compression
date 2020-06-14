@@ -39,6 +39,12 @@ public:
 	long getSumSq(char channel, pair<int,int> ul, int dim);
 
 public:
+	int redSum = 0;
+  int greenSum = 0;
+  int blueSum = 0;
+  int redSumSq = 0;
+  int greenSumSq = 0;
+  int blueSumSq = 0;
 
 	// initialize the private vectors so that, for each color,  entry 
 	// (x,y) is the cumulative sum of the the color values from (0,0)
@@ -46,10 +52,14 @@ public:
 	// sum of squares from (0,0) to (x,y).
 	stats(PNG & im); 
 
+	void populateEdges (int row, int col, PNG& im);
+	void clearAccumulators();
+	void setVectorDimensions(PNG& im);
+
 	// given a square, compute its sum of squared deviations from mean, over all color channels.
 	/* @param ul is (x,y) of the upper left corner of the square 
 	* @param dim is log of side length of the square*/
-	long getVar(pair<int,int> ul, int dim);
+	double getVar(pair<int,int> ul, int dim);
 
 	// given a square, return the average color value over the square as a pixel.
 	/* Each color component of the pixel is the average value of that component over
