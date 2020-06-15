@@ -119,6 +119,27 @@ TEST_CASE("stats::basic variance three","[weight=1][part=stats]"){
     REQUIRE(result == 4760);
 }
 
+TEST_CASE("stats::basic variance extra","[weight=1][part=stats]"){
+    PNG data; data.resize(4,4);
+    int counter = 1;
+
+    for (int i = 0; i < 4; i ++){
+        for (int j = 0; j < 4; j++){
+            RGBAPixel * p = data.getPixel(i,j);
+            p->r = 3 * counter;
+            p->g = 2 * counter;
+            p->b = 1 * counter;
+            p->a = 1.0;
+            
+            counter++;
+        }
+    }
+
+    stats s(data);
+    pair<int,int> ul(0,1);
+    long result = s.getVar(ul,1);
+}
+
 
 // TEST_CASE("qtcount::basic ctor render","[weight=1][part=qtcount]"){
 //     PNG img;

@@ -33,15 +33,6 @@ stats::stats(PNG & im){
       sumsqBlue[row].push_back(sumsqBlue[row][col-1] + sumsqBlue[row-1][col] - sumsqBlue[row-1][col-1] + pow(blue,2));
     }
   }
-
-  std::cout << std::endl;
-  std::cout << std::endl;
-  for (int i = 0; i < (int) sumRed.size(); i++) {
-    for (int j = 0; j < (int) sumRed[0].size(); j++) {
-      std::cout << "i: " << i << ", j: " << j << " - " << sumRed[i][j] << std::endl;
-    }
-  }
-
 }
 
 void stats::setVectorDimensions(PNG& im) {
@@ -101,15 +92,18 @@ long stats::getSumSq(char channel, pair<int,int> ul, int dim){
 }
 
 long stats::getSumHelper(vector<vector<long>> sums, pair<int,int> ul, int dim) {
+  int lrRow = ul.first + pow(2,dim)-1;
+  int lrCol = ul.second + pow(2,dim)-1;
+
   long leftSub = 0;
   long upSub = 0; 
   long cornerSub = 0;
-  long lr = sums[ul.first + pow(2,dim)-1][ul.second + pow(2,dim)-1];
+  long lr = sums[lrRow][lrCol];
 
-  if (ul.first != 0) upSub = sums[ul.first-1][ul.second];
-  if (ul.second != 0) leftSub = sums[ul.first][ul.second-1];
+  if (ul.first != 0) upSub = sums[lrRow-2][lrCol];
+  if (ul.second != 0) leftSub = sums[lrRow][lrCol-2];
   if (ul.first != 0 && ul.second != 0) cornerSub = sums[ul.first-1][ul.second-1];
-  
+
   return lr - leftSub - upSub + cornerSub;
 }
 
