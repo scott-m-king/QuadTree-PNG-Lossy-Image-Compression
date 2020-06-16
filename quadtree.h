@@ -182,6 +182,8 @@ private:
     */
    void clear();
 
+   void deleteNodes(Node*& root);
+
    /**
     * Complete for pa3
     * Copies the parameter other quadtree into the current quadtree.
@@ -209,6 +211,8 @@ private:
     virtual bool prunable(Node * root, int tol) = 0;
 
    /* =================== end of private PA3 functions ============== */
+
+   void traverse(Node* root);
 };
 
 #endif 

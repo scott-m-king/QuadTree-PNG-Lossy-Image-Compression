@@ -92,17 +92,19 @@ long stats::getSumSq(char channel, pair<int,int> ul, int dim){
 }
 
 long stats::getSumHelper(vector<vector<long>> sums, pair<int,int> ul, int dim) {
+  int subAmount = pow(2,dim);
+  
   int lrRow = ul.first + pow(2,dim)-1;
   int lrCol = ul.second + pow(2,dim)-1;
+  long lr = sums[lrRow][lrCol];
 
   long leftSub = 0;
   long upSub = 0; 
   long cornerSub = 0;
-  long lr = sums[lrRow][lrCol];
 
-  if (ul.first != 0) upSub = sums[lrRow-2][lrCol];
-  if (ul.second != 0) leftSub = sums[lrRow][lrCol-2];
-  if (ul.first != 0 && ul.second != 0) cornerSub = sums[ul.first-1][ul.second-1];
+  if (ul.first != 0) upSub = sums[lrRow-subAmount][lrCol];
+  if (ul.second != 0) leftSub = sums[lrRow][lrCol-subAmount];
+  if (ul.first != 0 && ul.second != 0) cornerSub = sums[ul.first-subAmount][ul.second-subAmount];
 
   return lr - leftSub - upSub + cornerSub;
 }
