@@ -119,130 +119,130 @@ TEST_CASE("stats::basic variance three","[weight=1][part=stats]"){
     REQUIRE(result == 4760);
 }
 
-// TEST_CASE("stats::basic variance extra","[weight=1][part=stats]"){
-//     PNG data; data.resize(4,4);
-//     int counter = 1;
+TEST_CASE("stats::basic variance extra","[weight=1][part=stats]"){
+    PNG data; data.resize(4,4);
+    int counter = 1;
 
-//     for (int i = 0; i < 4; i ++){
-//         for (int j = 0; j < 4; j++){
-//             RGBAPixel * p = data.getPixel(i,j);
-//             p->r = 3 * counter;
-//             p->g = 2 * counter;
-//             p->b = 1 * counter;
-//             p->a = 1.0;
+    for (int i = 0; i < 4; i ++){
+        for (int j = 0; j < 4; j++){
+            RGBAPixel * p = data.getPixel(i,j);
+            p->r = 3 * counter;
+            p->g = 2 * counter;
+            p->b = 1 * counter;
+            p->a = 1.0;
             
-//             counter++;
-//         }
-//     }
+            counter++;
+        }
+    }
 
-//     stats s(data);
-//     pair<int,int> ul(0,1);
-//     long result = s.getVar(ul,1);
-// }
-
-
-// TEST_CASE("qtcount::basic ctor render","[weight=1][part=qtcount]"){
-//     PNG img;
-//     img.readFromFile("images/orig/geo.png");
-
-//     qtcount t1(img);
-
-//     PNG out = t1.render();
-
-//     REQUIRE(out==img);
-// }
+    stats s(data);
+    pair<int,int> ul(0,1);
+    long result = s.getVar(ul,1);
+}
 
 
-// TEST_CASE("qtcount::basic copy","[weight=1][part=qtcount]"){
-//     PNG img;
-//     img.readFromFile("images/orig/geo.png");
+TEST_CASE("qtcount::basic ctor render","[weight=1][part=qtcount]"){
+    PNG img;
+    img.readFromFile("images/orig/geo.png");
 
-//     qtcount t1(img);
-//     qtcount t1copy(t1);
+    qtcount t1(img);
 
-//     PNG out = t1copy.render();
+    PNG out = t1.render();
 
-//     REQUIRE(out==img);
-// }
-
+    REQUIRE(out==img);
+}
 
 
-// TEST_CASE("qtcount::basic prune","[weight=1][part=qtcount]"){
-//     PNG img;
-//     img.readFromFile("images/orig/adasquare.png");
+TEST_CASE("qtcount::basic copy","[weight=1][part=qtcount]"){
+    PNG img;
+    img.readFromFile("images/orig/geo.png");
+
+    qtcount t1(img);
+    qtcount t1copy(t1);
+
+    PNG out = t1copy.render();
+
+    REQUIRE(out==img);
+}
+
+
+
+TEST_CASE("qtcount::basic prune","[weight=1][part=qtcount]"){
+    PNG img;
+    img.readFromFile("images/orig/adasquare.png");
     
-//     qtcount t1(img); 
-//     t1.prune(3000);
-//     PNG result = t1.render();
+    qtcount t1(img); 
+    t1.prune(3000);
+    PNG result = t1.render();
 
-//     //result.writeToFile("images/soln/given-adaPrune-count.png");
+    //result.writeToFile("images/soln/given-adaPrune-count.png");
 
-//     PNG expected; 
-//     expected.readFromFile("images/soln/given-adaPrune-count.png");
+    PNG expected; 
+    expected.readFromFile("images/soln/given-adaPrune-count.png");
 
-//     REQUIRE(expected==result);
-// }
+    REQUIRE(expected==result);
+}
 
-// TEST_CASE("qtcount::basic pruneSize","[weight=1][part=qtcount]"){
-//     PNG img;
-//     img.readFromFile("images/orig/adasquare.png");
+TEST_CASE("qtcount::basic pruneSize","[weight=1][part=qtcount]"){
+    PNG img;
+    img.readFromFile("images/orig/adasquare.png");
     
-//     qtcount t1(img); 
-//     int result = t1.pruneSize(3000);
+    qtcount t1(img); 
+    int result = t1.pruneSize(3000);
 
-//     int expected = 9394;
+    int expected = 9394;
 
-//     REQUIRE(expected==result);
-// }
+    REQUIRE(expected==result);
+}
 
-// TEST_CASE("qtcount::basic idealPrune","[weight=1][part=qtcount]"){
-//     PNG img;
-//     img.readFromFile("images/orig/adasquare.png");
+TEST_CASE("qtcount::basic idealPrune","[weight=1][part=qtcount]"){
+    PNG img;
+    img.readFromFile("images/orig/adasquare.png");
     
-//     qtcount t1(img); 
-//     int result = t1.idealPrune(13904);
+    qtcount t1(img); 
+    int result = t1.idealPrune(13904);
 
-//     int expected = 1366;
+    int expected = 1366;
 
-//     REQUIRE(expected==result);
-// }
+    REQUIRE(expected==result);
+}
 
-// TEST_CASE("qtvar::basic prune","[weight=1][part=qtvar]"){
-//     PNG img;
-//     img.readFromFile("images/orig/adasquare.png");
+TEST_CASE("qtvar::basic prune","[weight=1][part=qtvar]"){
+    PNG img;
+    img.readFromFile("images/orig/adasquare.png");
     
-//     qtvar t1(img); 
-//     t1.prune(3000);
-//     PNG result = t1.render();
+    qtvar t1(img); 
+    t1.prune(3000);
+    PNG result = t1.render();
 
-//     //result.writeToFile("images/soln/given-adaPrune-var.png");
+    //result.writeToFile("images/soln/given-adaPrune-var.png");
 
-//     PNG expected; 
-//     expected.readFromFile("images/soln/given-adaPrune-var.png");
+    PNG expected; 
+    expected.readFromFile("images/soln/given-adaPrune-var.png");
 
-//     REQUIRE(expected==result);
-// }
+    REQUIRE(expected==result);
+}
 
-// TEST_CASE("qtvar::basic pruneSize","[weight=1][part=qtvar]"){
-//     PNG img;
-//     img.readFromFile("images/orig/adasquare.png");
+TEST_CASE("qtvar::basic pruneSize","[weight=1][part=qtvar]"){
+    PNG img;
+    img.readFromFile("images/orig/adasquare.png");
     
-//     qtvar t1(img); 
-//     int result = t1.pruneSize(3000);
+    qtvar t1(img); 
+    int result = t1.pruneSize(3000);
 
-//     int expected = 15547;
+    int expected = 15547;
 
-//     REQUIRE(expected==result);
-// }
+    REQUIRE(expected==result);
+}
 
-// TEST_CASE("qtvar::basic idealPrune","[weight=1][part=qtvar]"){
-//     PNG img;
-//     img.readFromFile("images/orig/adasquare.png");
+TEST_CASE("qtvar::basic idealPrune","[weight=1][part=qtvar]"){
+    PNG img;
+    img.readFromFile("images/orig/adasquare.png");
     
-//     qtvar t1(img); 
-//     int result = t1.idealPrune(13904);
+    qtvar t1(img); 
+    int result = t1.idealPrune(13904);
 
-//     int expected = 3865;
+    int expected = 3865;
 
-//     REQUIRE(expected==result);
-// }
+    REQUIRE(expected==result);
+}

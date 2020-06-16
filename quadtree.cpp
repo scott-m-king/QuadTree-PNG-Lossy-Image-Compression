@@ -34,17 +34,17 @@ quadtree & quadtree::operator=(const quadtree & rhs) {
 }
 
 quadtree::quadtree(PNG & imIn) {
-  int dim = min(log2(imIn.width()), log2(imIn.height()));
-	stats s = stats(imIn);
+  	int dim = min(log2(imIn.width()), log2(imIn.height()));
 	pair<int,int> ul = {0,0};
 
+	stats s = stats(imIn); 			 // rearranged this position
 	root = buildTree(s, ul, dim);
-	traverse(root);
+	//traverse(root);
 	edge = dim;
 }
 
 quadtree::Node * quadtree::buildTree(stats & s, pair<int,int> & ul, int dim) {
-	cout << "Dim: " << dim << endl;
+	 cout << "Dim: " << dim << endl;
 
 	if (dim == 0) {
 		Node* root = new Node(ul, dim, s.getAvg(ul, dim), s.getVar(ul, dim));
@@ -53,16 +53,19 @@ quadtree::Node * quadtree::buildTree(stats & s, pair<int,int> & ul, int dim) {
 		root->SE = NULL;
 		root->SW = NULL;
 		return root;
-	}
+	} 
 
+	
 	Node* root = new Node(ul, dim, s.getAvg(ul, dim), s.getVar(ul, dim));
 
 	// 2^dim/2 == 2^(dim-1) (dim represents log_2 of side length, need to half each recursion)
 	int offset = pow(2,dim-1); 
 
+	// cout << "Offset: " << offset << endl;
+
 	pair<int,int> nw = {ul.first, ul.second};
-	pair<int,int> ne = {ul.first, ul.second+offset};
-	pair<int,int> sw = {ul.first+offset, ul.second};
+	pair<int,int> ne = {ul.first+offset, ul.second};
+	pair<int,int> sw = {ul.first, ul.second+offset};
 	pair<int,int> se = {ul.first+offset,ul.second+offset};
 
 	root->NW = buildTree(s, nw, dim-1);
@@ -71,6 +74,9 @@ quadtree::Node * quadtree::buildTree(stats & s, pair<int,int> & ul, int dim) {
 	root->SW = buildTree(s, sw, dim-1);
 
 	return root;
+	
+	
+
 }
 
 void quadtree::traverse(Node* root) {
@@ -86,6 +92,18 @@ void quadtree::traverse(Node* root) {
 
 PNG quadtree::render() {
 	// pixels depend on the size of the squares
+
+	// from office hours
+	// we need  helper function to render a rect from the node (img node which has its coord and size)
+	// we use this node to color the image, this node is a leaf node - take upper left, dimension then color it
+
+	// also need a recursive helper
+
+	// we use int edge from  the quadtree.h
+
+
+	// we return a type of node
+
 	return PNG();
 }
 
