@@ -53,8 +53,9 @@ public:
 	stats(PNG & im); 
 
 	void populateEdges (int row, int col, PNG& im);
-	void clearAccumulators();
+	void setAccumulators();
 	void setVectorDimensions(PNG& im);
+	long getSumHelper(vector<vector<long>>& sums, pair<int,int> ul, int dim);
 
 	// given a square, compute its sum of squared deviations from mean, over all color channels.
 	/* @param ul is (x,y) of the upper left corner of the square 

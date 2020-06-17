@@ -13,7 +13,6 @@
 using namespace std;
 using namespace cs221util;
 
-
 /*
 TEST_CASE("qtcount::basic canada","[weight=1][part=qtcount]"){
     PNG img;
@@ -26,8 +25,6 @@ TEST_CASE("qtcount::basic canada","[weight=1][part=qtcount]"){
     result.writeToFile("../spec/PA3pic6.png");
 } 
 */
-    
-
 
 TEST_CASE("stats::basic rectArea","[weight=1][part=stats]"){
 
@@ -58,7 +55,6 @@ TEST_CASE("stats::basic getAvg","[weight=1][part=stats]"){
     REQUIRE(result == expected);
 }
 
-
 TEST_CASE("stats::basic variance","[weight=1][part=stats]"){
     PNG data; data.resize(2,2);
     for (int i = 0; i < 2; i ++){
@@ -68,10 +64,6 @@ TEST_CASE("stats::basic variance","[weight=1][part=stats]"){
             p->g = 3 * i + 20 * j;
             p->b = 23 * i + 23 * j;
             p->a = 1.0;
-            // std::cout << "i: " << i << ", j: " << j << std::endl;
-            // std::cout << "red: " << (int) p->r << std::endl;
-            // std::cout << "green: " << (int) p->g << std::endl;
-            // std::cout << "blue: " << (int) p->b << std::endl;
         }
     }
 
@@ -81,6 +73,73 @@ TEST_CASE("stats::basic variance","[weight=1][part=stats]"){
 
     REQUIRE(result == 1876);
 }
+
+TEST_CASE("stats::basic variance two","[weight=1][part=stats]"){
+    PNG data; data.resize(2,2);
+    int counter = 1;
+
+    for (int i = 0; i < 2; i ++){
+        for (int j = 0; j < 2; j++){
+            RGBAPixel * p = data.getPixel(i,j);
+            p->r = 5 * counter;
+            p->g = 3 * counter;
+            p->b = 10 * counter;
+            p->a = 1.0;
+            counter++;
+        }
+    }
+
+    stats s(data);
+    pair<int,int> ul(0,0);
+    long result = s.getVar(ul,1);
+
+    REQUIRE(result == 670);
+}
+
+TEST_CASE("stats::basic variance three","[weight=1][part=stats]"){
+    PNG data; data.resize(4,4);
+    int counter = 1;
+
+    for (int i = 0; i < 4; i ++){
+        for (int j = 0; j < 4; j++){
+            RGBAPixel * p = data.getPixel(i,j);
+            p->r = 3 * counter;
+            p->g = 2 * counter;
+            p->b = 1 * counter;
+            p->a = 1.0;
+            
+            counter++;
+        }
+    }
+
+    stats s(data);
+    pair<int,int> ul(0,0);
+    long result = s.getVar(ul,2);
+
+    REQUIRE(result == 4760);
+}
+
+TEST_CASE("stats::basic variance extra","[weight=1][part=stats]"){
+    PNG data; data.resize(4,4);
+    int counter = 1;
+
+    for (int i = 0; i < 4; i ++){
+        for (int j = 0; j < 4; j++){
+            RGBAPixel * p = data.getPixel(i,j);
+            p->r = 3 * counter;
+            p->g = 2 * counter;
+            p->b = 1 * counter;
+            p->a = 1.0;
+            
+            counter++;
+        }
+    }
+
+    stats s(data);
+    pair<int,int> ul(0,1);
+    long result = s.getVar(ul,1);
+}
+
 
 TEST_CASE("qtcount::basic ctor render","[weight=1][part=qtcount]"){
     PNG img;
@@ -116,7 +175,7 @@ TEST_CASE("qtcount::basic prune","[weight=1][part=qtcount]"){
     t1.prune(3000);
     PNG result = t1.render();
 
-    //result.writeToFile("images/soln/given-adaPrune-count.png");
+    // result.writeToFile("images/out/given-adaPrune-var.png");
 
     PNG expected; 
     expected.readFromFile("images/soln/given-adaPrune-count.png");
@@ -131,6 +190,8 @@ TEST_CASE("qtcount::basic pruneSize","[weight=1][part=qtcount]"){
     qtcount t1(img); 
     int result = t1.pruneSize(3000);
 
+    // result.writeToFile("images/out/given-adaPrune-var.png");
+
     int expected = 9394;
 
     REQUIRE(expected==result);
@@ -142,6 +203,8 @@ TEST_CASE("qtcount::basic idealPrune","[weight=1][part=qtcount]"){
     
     qtcount t1(img); 
     int result = t1.idealPrune(13904);
+
+    // result.writeToFile("images/out/given-adaPrune-var.png");
 
     int expected = 1366;
 
@@ -156,7 +219,7 @@ TEST_CASE("qtvar::basic prune","[weight=1][part=qtvar]"){
     t1.prune(3000);
     PNG result = t1.render();
 
-    //result.writeToFile("images/soln/given-adaPrune-var.png");
+    // result.writeToFile("images/out/given-adaPrune-var.png");
 
     PNG expected; 
     expected.readFromFile("images/soln/given-adaPrune-var.png");
