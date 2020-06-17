@@ -1,5 +1,3 @@
-
-
 #include "stats.h"
 #include <cmath>
 #include <typeinfo>

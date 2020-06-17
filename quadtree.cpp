@@ -62,12 +62,7 @@ quadtree::Node * quadtree::buildTree(stats & s, pair<int,int> & ul, int dim) {
     temp->NE = buildTree(s, ne, dim-1);
     temp->SE = buildTree(s, se, dim-1);
     temp->SW = buildTree(s, sw, dim-1);
-  } else {
-		temp->NW = NULL;
-		temp->NE = NULL;
-		temp->SE = NULL;
-		temp->SW = NULL;
-	}
+  }
 
   return temp;
 }
@@ -94,27 +89,32 @@ void quadtree::renderHelper(PNG& img, Node* root) {
 	renderHelper(img, root->SE);
 }
 
-void quadtree::traverse(Node* root) {
-	// if (root == NULL) {
-	// 	return;
-	// } else {
-	// 	cout << "avg red: " << (int) root->avg.r << endl;
-	// 	cout << "avg green: " << (int) root->avg.g << endl;
-	// 	cout << "avg blue: " << (int) root->avg.b << endl;
-	// 	traverse(root->NW);
-	// 	traverse(root->NE);
-	// 	traverse(root->SW);
-	// 	traverse(root->SE);
-	// }
-}
-
 int quadtree::idealPrune(int leaves) {
-
+	// use pruneSize with this function 
 	return 0;
 }
 
 int quadtree::pruneSize(int tol) {
-	return 0;
+	pruneCount = 0;
+	pruneSizeHelper(root, tol);
+	cout << "pruneCount: " << pruneCount << endl;
+	return pruneCount;
+}
+
+void quadtree::pruneSizeHelper(Node* node, int tol) {
+	if (node == NULL) return;
+	if (prunable(node, tol)) {
+		pruneCount++;
+		node->NW = NULL;
+		node->NE = NULL;
+		node->SE = NULL;
+		node->SW = NULL;
+	} else {
+		pruneSizeHelper(node->NW, tol);
+		pruneSizeHelper(node->NE, tol);
+		pruneSizeHelper(node->SW, tol);
+		pruneSizeHelper(node->SE, tol);
+	}
 }
 
 void quadtree::prune(int tol) {

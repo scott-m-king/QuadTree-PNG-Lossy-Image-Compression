@@ -2,7 +2,6 @@
 
 bool qtcount::prunable(Node * root, int tol) {
     bool result = true;
-    cout << "hello" << endl;
     checkAvg(root, tol, root->avg, result);
     return result;
 }

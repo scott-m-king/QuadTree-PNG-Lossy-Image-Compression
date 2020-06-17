@@ -120,8 +120,6 @@ public:
 
    quadtree(PNG & imIn);
 
-   void traverse(Node* root);
-
    /**
     * Render returns a PNG image consisting of the pixels
     * stored in the tree. It may be used on pruned trees. Draws
@@ -154,6 +152,8 @@ public:
     */
    int pruneSize(int tol);
 
+   void pruneSizeHelper(Node* root, int tol);
+
    /*
     * The idealPrune function can be considered to be the inverse
     * of the pruneSize function. It takes as input a number of leaves
@@ -175,6 +175,7 @@ private:
 
    Node* root; // ptr to the root of the quadtree
    int edge; // side length of the square image
+   int pruneCount;
    
 
    /* =================== start of private PA3 functions ============== */
