@@ -94,7 +94,22 @@ void quadtree::renderHelper(PNG& img, Node* root) {
 	renderHelper(img, root->SE);
 }
 
+void quadtree::traverse(Node* root) {
+	// if (root == NULL) {
+	// 	return;
+	// } else {
+	// 	cout << "avg red: " << (int) root->avg.r << endl;
+	// 	cout << "avg green: " << (int) root->avg.g << endl;
+	// 	cout << "avg blue: " << (int) root->avg.b << endl;
+	// 	traverse(root->NW);
+	// 	traverse(root->NE);
+	// 	traverse(root->SW);
+	// 	traverse(root->SE);
+	// }
+}
+
 int quadtree::idealPrune(int leaves) {
+
 	return 0;
 }
 
@@ -114,12 +129,12 @@ void quadtree::pruneHelper(Node*& tree, int tol) {
 		tree->NE = NULL;
 		tree->SE = NULL;
 		tree->SW = NULL;
+	} else {
+		pruneHelper(tree->NW, tol);
+		pruneHelper(tree->NE, tol);
+		pruneHelper(tree->SE, tol);
+		pruneHelper(tree->SW, tol);
 	}
-
-	pruneHelper(tree->NW, tol);
-	pruneHelper(tree->NE, tol);
-	pruneHelper(tree->SE, tol);
-	pruneHelper(tree->SW, tol);
 }
 
 void quadtree::clear() {

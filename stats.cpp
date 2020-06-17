@@ -92,7 +92,7 @@ long stats::getSumSq(char channel, pair<int,int> ul, int dim){
   }
 }
 
-long stats::getSumHelper(vector<vector<long>>& sums, pair<int,int> ul, int dim) {
+long stats::getSumHelper(const vector<vector<long>>& sums, pair<int,int> ul, int dim) {
   int subAmount = pow(2,dim);
   
   int lrRow = ul.first + pow(2,dim)-1;
