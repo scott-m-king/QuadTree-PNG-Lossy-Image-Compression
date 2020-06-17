@@ -34,77 +34,64 @@ quadtree & quadtree::operator=(const quadtree & rhs) {
 }
 
 quadtree::quadtree(PNG & imIn) {
-  	int dim = min(log2(imIn.width()), log2(imIn.height()));
-	pair<int,int> ul = {0,0};
+  int sideLength = min(log2(imIn.height()), log2(imIn.width()));
+  sideLength = pow(2,sideLength);
 
-	stats s = stats(imIn); 			 // rearranged this position
-	root = buildTree(s, ul, dim);
-	//traverse(root);
-	edge = dim;
+  imIn.resize(sideLength,sideLength);
+  int dim = log2(sideLength);
+
+  stats s = stats(imIn);
+  pair<int,int> ul = {0,0};
+
+  edge = sideLength;
+  root = buildTree(s, ul, dim);
 }
 
 quadtree::Node * quadtree::buildTree(stats & s, pair<int,int> & ul, int dim) {
-	 cout << "Dim: " << dim << endl;
+  Node* temp = new Node(ul, dim, s.getAvg(ul, dim), s.getVar(ul, dim));
 
-	if (dim == 0) {
-		Node* root = new Node(ul, dim, s.getAvg(ul, dim), s.getVar(ul, dim));
-		root->NW = NULL;
-		root->NE = NULL;
-		root->SE = NULL;
-		root->SW = NULL;
-		return root;
-	} 
+  if (dim > 0) {
+    int offset = pow(2,dim-1); 
 
-	
-	Node* root = new Node(ul, dim, s.getAvg(ul, dim), s.getVar(ul, dim));
+    pair<int,int> nw = {ul.first, ul.second};
+    pair<int,int> ne = {ul.first+offset, ul.second};
+    pair<int,int> se = {ul.first, ul.second+offset};
+    pair<int,int> sw = {ul.first+offset,ul.second+offset};
 
-	// 2^dim/2 == 2^(dim-1) (dim represents log_2 of side length, need to half each recursion)
-	int offset = pow(2,dim-1); 
+    temp->NW = buildTree(s, nw, dim-1);
+    temp->NE = buildTree(s, ne, dim-1);
+    temp->SE = buildTree(s, se, dim-1);
+    temp->SW = buildTree(s, sw, dim-1);
+  } else {
+		temp->NW = NULL;
+		temp->NE = NULL;
+		temp->SE = NULL;
+		temp->SW = NULL;
+	}
 
-	// cout << "Offset: " << offset << endl;
-
-	pair<int,int> nw = {ul.first, ul.second};
-	pair<int,int> ne = {ul.first+offset, ul.second};
-	pair<int,int> sw = {ul.first, ul.second+offset};
-	pair<int,int> se = {ul.first+offset,ul.second+offset};
-
-	root->NW = buildTree(s, nw, dim-1);
-	root->NE = buildTree(s, ne, dim-1);
-	root->SE = buildTree(s, se, dim-1);
-	root->SW = buildTree(s, sw, dim-1);
-
-	return root;
-	
-	
-
-}
-
-void quadtree::traverse(Node* root) {
-	// if (root == NULL) return;
-	// traverse(root->NW);
-	// traverse(root->NE);
-	// traverse(root->SE);
-	// traverse(root->SW);
-
-	// cout << "Avg: " << s.getAvg(ul, dim) << ", Var: " << s.getVar(ul, dim) << endl;
-	// cout << "(" << root->upLeft.first << ", " << root->upLeft.second << ")" << endl;
+  return temp;
 }
 
 PNG quadtree::render() {
-	// pixels depend on the size of the squares
+	PNG result;
+	result.resize(edge,edge);
+	renderHelper(result, root);
+	return result;
+}
 
-	// from office hours
-	// we need  helper function to render a rect from the node (img node which has its coord and size)
-	// we use this node to color the image, this node is a leaf node - take upper left, dimension then color it
-
-	// also need a recursive helper
-
-	// we use int edge from  the quadtree.h
-
-
-	// we return a type of node
-
-	return PNG();
+void quadtree::renderHelper(PNG& img, Node* root) {
+	if (root->NE == NULL) {
+		RGBAPixel* curr = img.getPixel(root->upLeft.first, root->upLeft.second);
+		curr->r = root->avg.r;
+		curr->g = root->avg.g;
+		curr->b = root->avg.b;
+		curr->a = root->avg.a;
+		return;
+	}
+	renderHelper(img, root->NW);
+	renderHelper(img, root->NE);
+	renderHelper(img, root->SW);
+	renderHelper(img, root->SE);
 }
 
 int quadtree::idealPrune(int leaves) {
@@ -116,25 +103,54 @@ int quadtree::pruneSize(int tol) {
 }
 
 void quadtree::prune(int tol) {
-	/* Your code here! */
+	pruneHelper(root, tol);
+}
+
+void quadtree::pruneHelper(Node*& tree, int tol) {
+	if (tree == NULL) return;
+
+	if (prunable(tree, tol)) {
+		tree->NW = NULL;
+		tree->NE = NULL;
+		tree->SE = NULL;
+		tree->SW = NULL;
+	}
+
+	pruneHelper(tree->NW, tol);
+	pruneHelper(tree->NE, tol);
+	pruneHelper(tree->SE, tol);
+	pruneHelper(tree->SW, tol);
 }
 
 void quadtree::clear() {
-	deleteNodes(root);
+	deleteTree(root);
+	delete root;
+	root = NULL;
 }
 
-void quadtree::deleteNodes(Node*& root) {
-	// if (root == NULL) return;
-	// deleteNodes(root->NW);
-	// deleteNodes(root->NE);
-	// deleteNodes(root->SE);
-	// deleteNodes(root->SW);
-	// delete root;
-	// root = NULL;
+void quadtree::deleteTree(Node*& tree) {
+	if (tree == NULL) return;
+	deleteTree(tree->NW);
+	deleteTree(tree->NE);
+	deleteTree(tree->SE);
+	deleteTree(tree->SW);
+	delete tree;
+	tree = NULL;
 }
 
 void quadtree::copy(const quadtree & orig) {
-	/* your code here */
+	edge = orig.edge;
+	root = copyTree(orig.root);
+}
+
+quadtree::Node* quadtree::copyTree(Node* node) {
+	if (node == NULL) return NULL;
+	Node* temp = new Node(node->upLeft, node->dim, node->avg, node->var);
+	temp->NW = copyTree(node->NW);
+	temp->NE = copyTree(node->NE);
+	temp->SE = copyTree(node->SE);
+	temp->SW = copyTree(node->SW);
+	return temp;
 }
 
 

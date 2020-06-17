@@ -49,7 +49,6 @@ protected:
       Node * NE; // ptr to NE subtree
       Node * SE; // ptr to SE subtree
       Node * SW; // ptr to SW subtree
-      
    };
    
 	
@@ -129,6 +128,7 @@ public:
     */
    PNG render();
 
+   void renderHelper(PNG& img, Node* root);
 
    /*
     *  Prune function trims subtrees as high as possible in the tree.
@@ -139,6 +139,8 @@ public:
     * You may want a recursive helper function for this one.
     */
    void prune(int tol);
+
+   void pruneHelper(Node*& tree, int tol);
 
    /*
     * The pruneSize function takes a tolerance as input, and returns
@@ -170,7 +172,7 @@ private:
    */
 
    Node* root; // ptr to the root of the quadtree
-    int edge; // side length of the square image
+   int edge; // side length of the square image
    
 
    /* =================== start of private PA3 functions ============== */
@@ -182,7 +184,7 @@ private:
     */
    void clear();
 
-   void deleteNodes(Node*& root);
+   void deleteTree(Node*& root);
 
    /**
     * Complete for pa3
@@ -192,6 +194,8 @@ private:
     * @param other The quadtree to be copied.
     */
    void copy(const quadtree & other);
+
+   Node* copyTree(Node* root);
 
    /**
     * Private helper function for the constructor. Recursively builds
@@ -211,8 +215,6 @@ private:
     virtual bool prunable(Node * root, int tol) = 0;
 
    /* =================== end of private PA3 functions ============== */
-
-   void traverse(Node* root);
 };
 
 #endif 
