@@ -49,7 +49,6 @@ protected:
       Node * NE; // ptr to NE subtree
       Node * SE; // ptr to SE subtree
       Node * SW; // ptr to SW subtree
-      
    };
    
 	
@@ -129,6 +128,7 @@ public:
     */
    PNG render();
 
+   void renderHelper(PNG& img, Node* root);
 
    /*
     *  Prune function trims subtrees as high as possible in the tree.
@@ -139,6 +139,8 @@ public:
     * You may want a recursive helper function for this one.
     */
    void prune(int tol);
+
+   void pruneHelper(Node*& tree, int tol);
 
    /*
     * The pruneSize function takes a tolerance as input, and returns

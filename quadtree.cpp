@@ -48,7 +48,6 @@ quadtree::quadtree(PNG & imIn) {
 }
 
 quadtree::Node * quadtree::buildTree(stats & s, pair<int,int> & ul, int dim) {
-
   Node* temp = new Node(ul, dim, s.getAvg(ul, dim), s.getVar(ul, dim));
 
   if (dim > 0) {
@@ -74,13 +73,26 @@ quadtree::Node * quadtree::buildTree(stats & s, pair<int,int> & ul, int dim) {
 }
 
 PNG quadtree::render() {
-	// pixels depend on the size of the squares
-	return PNG();
+	PNG result;
+	result.resize(edge,edge);
+	renderHelper(result, root);
+	return result;
 }
 
-// PNG quadtree::renderHelper(Node* root) {
-// 	return PNG();
-// }
+void quadtree::renderHelper(PNG& img, Node* root) {
+	if (root->NE == NULL) {
+		RGBAPixel* curr = img.getPixel(root->upLeft.first, root->upLeft.second);
+		curr->r = root->avg.r;
+		curr->g = root->avg.g;
+		curr->b = root->avg.b;
+		curr->a = root->avg.a;
+		return;
+	}
+	renderHelper(img, root->NW);
+	renderHelper(img, root->NE);
+	renderHelper(img, root->SW);
+	renderHelper(img, root->SE);
+}
 
 int quadtree::idealPrune(int leaves) {
 	return 0;
@@ -91,7 +103,23 @@ int quadtree::pruneSize(int tol) {
 }
 
 void quadtree::prune(int tol) {
-	/* Your code here! */
+	pruneHelper(root, tol);
+}
+
+void quadtree::pruneHelper(Node*& tree, int tol) {
+	if (tree == NULL) return;
+
+	if (prunable(tree, tol)) {
+		tree->NW = NULL;
+		tree->NE = NULL;
+		tree->SE = NULL;
+		tree->SW = NULL;
+	}
+
+	pruneHelper(tree->NW, tol);
+	pruneHelper(tree->NE, tol);
+	pruneHelper(tree->SE, tol);
+	pruneHelper(tree->SW, tol);
 }
 
 void quadtree::clear() {
@@ -100,14 +128,14 @@ void quadtree::clear() {
 	root = NULL;
 }
 
-void quadtree::deleteTree(Node*& root) {
-	if (root == NULL) return;
-	deleteTree(root->NW);
-	deleteTree(root->NE);
-	deleteTree(root->SE);
-	deleteTree(root->SW);
-	delete root;
-	root = NULL;
+void quadtree::deleteTree(Node*& tree) {
+	if (tree == NULL) return;
+	deleteTree(tree->NW);
+	deleteTree(tree->NE);
+	deleteTree(tree->SE);
+	deleteTree(tree->SW);
+	delete tree;
+	tree = NULL;
 }
 
 void quadtree::copy(const quadtree & orig) {
