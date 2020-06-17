@@ -1,4 +1,5 @@
 
+
 #include "stats.h"
 #include <cmath>
 #include <typeinfo>
@@ -91,7 +92,7 @@ long stats::getSumSq(char channel, pair<int,int> ul, int dim){
   }
 }
 
-long stats::getSumHelper(vector<vector<long>> sums, pair<int,int> ul, int dim) {
+long stats::getSumHelper(vector<vector<long>>& sums, pair<int,int> ul, int dim) {
   int subAmount = pow(2,dim);
   
   int lrRow = ul.first + pow(2,dim)-1;
@@ -104,7 +105,7 @@ long stats::getSumHelper(vector<vector<long>> sums, pair<int,int> ul, int dim) {
 
   if (ul.first != 0) upSub = sums[lrRow-subAmount][lrCol];
   if (ul.second != 0) leftSub = sums[lrRow][lrCol-subAmount];
-  if (ul.first != 0 && ul.second != 0) cornerSub = sums[ul.first-subAmount][ul.second-subAmount];
+  if (ul.first != 0 && ul.second != 0) cornerSub = sums[ul.first-1][ul.second-1];
 
   return lr - leftSub - upSub + cornerSub;
 }
@@ -122,7 +123,7 @@ double stats::getVar(pair<int,int> ul, int dim){
   long green = getSumSq('g', ul, dim) - (pow(getSum('g', ul, dim),2) / rectArea(dim));
   long blue = getSumSq('b', ul, dim) - (pow(getSum('b', ul, dim),2) / rectArea(dim));
 
-  return (double) red + green + blue;
+  return red + green + blue;
 }
 
 RGBAPixel stats::getAvg(pair<int,int> ul, int dim){
@@ -132,3 +133,4 @@ RGBAPixel stats::getAvg(pair<int,int> ul, int dim){
 
   return RGBAPixel(red, green, blue);
 }
+

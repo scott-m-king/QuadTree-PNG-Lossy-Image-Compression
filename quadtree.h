@@ -170,7 +170,7 @@ private:
    */
 
    Node* root; // ptr to the root of the quadtree
-    int edge; // side length of the square image
+   int edge; // side length of the square image
    
 
    /* =================== start of private PA3 functions ============== */
@@ -182,7 +182,7 @@ private:
     */
    void clear();
 
-   void deleteNodes(Node*& root);
+   void deleteTree(Node*& root);
 
    /**
     * Complete for pa3
@@ -192,6 +192,8 @@ private:
     * @param other The quadtree to be copied.
     */
    void copy(const quadtree & other);
+
+   Node* copyTree(Node* root);
 
    /**
     * Private helper function for the constructor. Recursively builds
@@ -211,8 +213,6 @@ private:
     virtual bool prunable(Node * root, int tol) = 0;
 
    /* =================== end of private PA3 functions ============== */
-
-   void traverse(Node* root);
 };
 
 #endif 
