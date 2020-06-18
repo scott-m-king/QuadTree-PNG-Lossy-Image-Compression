@@ -11,7 +11,6 @@ using namespace std;
 using namespace cs221util;
 
 class qtcount:public quadtree {
-
     /* this derived class allows for a generic prune algorithm */
 
     public:
@@ -25,7 +24,8 @@ class qtcount:public quadtree {
         */
         bool prunable(Node * root, int tol);
 
-    // add your own helper functions here.
+        // add your own helper functions here.
+        void checkAvg(Node* node, int tol, RGBAPixel & avg, bool & result);
 
 };
 

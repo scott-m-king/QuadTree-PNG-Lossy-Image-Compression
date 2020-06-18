@@ -152,6 +152,8 @@ public:
     */
    int pruneSize(int tol);
 
+   void pruneSizeHelper(Node* node, int tol, int & pruneCount);
+
    /*
     * The idealPrune function can be considered to be the inverse
     * of the pruneSize function. It takes as input a number of leaves
