@@ -76,8 +76,8 @@ PNG quadtree::render() {
 
 void quadtree::renderHelper(PNG & img, Node * root) {
 	if (root->NE == NULL && root->NW == NULL && root->SE == NULL && root->SW == NULL) {
-		for (int row = root->upLeft.first+1; row < root->upLeft.first + pow(2,root->dim); row++) {
-			for (int col = root->upLeft.second+1; col < root->upLeft.second + pow(2,root->dim); col++) {
+		for (int row = root->upLeft.first; row < root->upLeft.first + pow(2,root->dim); row++) {
+			for (int col = root->upLeft.second; col < root->upLeft.second + pow(2,root->dim); col++) {
 				RGBAPixel* curr = img.getPixel(row, col);
 				curr->r = root->avg.r;
 				curr->g = root->avg.g;
