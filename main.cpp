@@ -26,6 +26,12 @@ int main()
 	origIm2.readFromFile("images/orig/adasquare.png");
 	PNG origIm3;
 	origIm3.readFromFile("images/orig/stanley-totem-poles.png");
+	// PNG origIm4;
+	// origIm4.readFromFile("images/orig/ubc.png");
+	// PNG origIm5;
+	// origIm5.readFromFile("images/orig/network.png");
+	PNG origIm6;
+	origIm6.readFromFile("images/orig/ben.png");
 
 	// use it to build a quadtree
 	qtcount t1(origIm1);
@@ -34,22 +40,37 @@ int main()
 	qtcount tCopy2(t2);
 	qtcount t3(origIm3);
 	qtcount tCopy3(t3);
+	// qtcount t4(origIm4);
+	// qtcount tCopy4(t4);
+	// qtcount t5(origIm5);
+	// qtcount tCopy5(t5);
+	qtcount t6(origIm6);
+	qtcount tCopy6(t6);
 
 	// prune the quadtree
 	tCopy1.prune(10000); 
 	tCopy2.prune(10000); 
 	tCopy3.prune(3000); 
+	// tCopy4.prune(20000);
+	// tCopy5.prune(10000);
+	tCopy6.prune(7000);
 
     
 	// render the quadtree
 	PNG ppic1 = tCopy1.render();
 	PNG ppic2 = tCopy2.render();
 	PNG ppic3 = tCopy3.render();
-
+	// PNG ppic4 = tCopy4.render();
+	// PNG ppic5 = tCopy5.render();
+	PNG ppic6 = tCopy6.render();
 
 	ppic1.writeToFile("images/out/output-prunedKJVFbig.png");
 	ppic2.writeToFile("images/out/output-prunedadasquare.png");
-	ppic3.writeToFile("images/out/output-prunedstanley-totem-poles.png");
+	ppic3.writeToFile("images/out/output-prunedstanley-totem-poles-square.png");
+	// ppic4.writeToFile("images/out/output-prunedubc.png");
+	// ppic5.writeToFile("images/out/output-networkpruned.png");
+	ppic6.writeToFile("images/out/output-benpruned.png");
+	
 
 	// use it to build a quadtree
 	qtvar v1(origIm1);
@@ -58,21 +79,35 @@ int main()
 	qtvar vCopy2(v2);
 	qtvar v3(origIm3);
 	qtvar vCopy3(v3);
+	// qtvar v4(origIm4);
+	// qtvar vCopy4(v4);
+	// qtvar v5(origIm5);
+	// qtvar vCopy5(v5);
+	qtvar v6(origIm6);
+	qtvar vCopy6(v6);
 
 	// prune the quadtree
 	vCopy1.prune(10000); 
 	vCopy2.prune(10000); 
 	vCopy3.prune(3000); 
+	// vCopy4.prune(20000); 
+	// vCopy5.prune(10000);
+	vCopy6.prune(10000);
 	
 	// render the quadtree
 	PNG vpic1 = vCopy1.render();
 	PNG vpic2 = vCopy2.render();
 	PNG vpic3 = vCopy3.render();
-
+	// PNG vpic4 = vCopy4.render();
+	// PNG vpic5 = vCopy5.render();
+	PNG vpic6 = vCopy6.render();
 
 	vpic1.writeToFile("images/out/output-prunedKJVFbig-var.png");
 	vpic2.writeToFile("images/out/output-prunedadasquare-var.png");
 	vpic3.writeToFile("images/out/output-prunedstanley-totem-poles-var.png");
+	// vpic4.writeToFile("images/out/output-prunedubc-var.png");
+	// vpic5.writeToFile("images/out/output-prunednetwork-var.png");
+	vpic6.writeToFile("images/out/output-benpruned-var.png");
 
     // comparisons
 

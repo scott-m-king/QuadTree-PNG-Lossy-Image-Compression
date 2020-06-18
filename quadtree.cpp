@@ -76,8 +76,8 @@ PNG quadtree::render() {
 
 void quadtree::renderHelper(PNG & img, Node * root) {
 	if (root->NE == NULL && root->NW == NULL && root->SE == NULL && root->SW == NULL) {
-		for (int row = root->upLeft.first; row < root->upLeft.first + pow(2,root->dim); row++) {
-			for (int col = root->upLeft.second; col < root->upLeft.second + pow(2,root->dim); col++) {
+		for (int row = root->upLeft.first+1; row < root->upLeft.first + pow(2,root->dim); row++) {
+			for (int col = root->upLeft.second+1; col < root->upLeft.second + pow(2,root->dim); col++) {
 				RGBAPixel* curr = img.getPixel(row, col);
 				curr->r = root->avg.r;
 				curr->g = root->avg.g;
@@ -94,29 +94,20 @@ void quadtree::renderHelper(PNG & img, Node * root) {
 }
 
 int quadtree::idealPrune(int leaves) {
-	long lo = 0;
-	long hi = root->var;
-	long mid;
+	double lo = 0;
+	double hi = root->var;
+	double mid;
 
-	while (lo < hi) {
+	while (hi > lo) {
 		mid = lo + (hi - lo) / 2;
-
-		long pruneAmount = pruneSize(mid);
-
-		if (pruneAmount == leaves) return mid;
-
-		if (pruneAmount > leaves && pruneSize(mid+1) <= leaves) {
-			return mid+1;
-		}
-
-		if (pruneAmount > leaves) {
-			lo = mid + 1;
-		}
-
-		if (pruneAmount < leaves) {
-			hi = mid - 1;
-		}
+		int pruneAmount = pruneSize(mid);
+		
+		if (pruneAmount == leaves) break; 
+		if (pruneAmount > leaves) lo = mid + 1;
+		if (pruneAmount < leaves) hi = mid - 1;
 	}
+
+	while (pruneSize(mid) > leaves) mid++;
 
 	return mid;
 }
@@ -147,10 +138,10 @@ void quadtree::pruneHelper(Node * &tree, int tol) {
 	if (tree == NULL) return;
 
 	if (prunable(tree, tol)) {
-		tree->NW = NULL;
-		tree->NE = NULL;
-		tree->SE = NULL;
-		tree->SW = NULL;
+		deleteTree(tree->NW);
+		deleteTree(tree->NE);
+		deleteTree(tree->SE);
+		deleteTree(tree->SW);
 	} else {
 		pruneHelper(tree->NW, tol);
 		pruneHelper(tree->NE, tol);
@@ -166,11 +157,12 @@ void quadtree::clear() {
 }
 
 void quadtree::deleteTree(Node*& tree) {
-	if (tree == NULL) return;
-	deleteTree(tree->NW);
-	deleteTree(tree->NE);
-	deleteTree(tree->SE);
-	deleteTree(tree->SW);
+	if (tree != NULL) {
+		deleteTree(tree->NW);
+		deleteTree(tree->NE);
+		deleteTree(tree->SE);
+		deleteTree(tree->SW);
+	}
 	delete tree;
 	tree = NULL;
 }
