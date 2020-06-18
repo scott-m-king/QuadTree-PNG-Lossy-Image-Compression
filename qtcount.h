@@ -25,7 +25,7 @@ class qtcount:public quadtree {
         bool prunable(Node * root, int tol);
 
         // add your own helper functions here.
-        void checkAvg(Node* node, int tol, RGBAPixel avg, bool result);
+        void checkAvg(Node* node, int tol, RGBAPixel & avg, bool & result);
 
 };
 

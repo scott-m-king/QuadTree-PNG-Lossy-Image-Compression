@@ -152,7 +152,7 @@ public:
     */
    int pruneSize(int tol);
 
-   void pruneSizeHelper(Node* root, int tol);
+   void pruneSizeHelper(Node* node, int tol, int & pruneCount);
 
    /*
     * The idealPrune function can be considered to be the inverse
@@ -175,7 +175,6 @@ private:
 
    Node* root; // ptr to the root of the quadtree
    int edge; // side length of the square image
-   int pruneCount;
    
 
    /* =================== start of private PA3 functions ============== */

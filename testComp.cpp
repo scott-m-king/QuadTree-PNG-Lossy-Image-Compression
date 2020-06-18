@@ -190,8 +190,6 @@ TEST_CASE("qtcount::basic pruneSize","[weight=1][part=qtcount]"){
     qtcount t1(img); 
     int result = t1.pruneSize(3000);
 
-    // result.writeToFile("images/out/given-adaPrune-var.png");
-
     int expected = 9394;
 
     REQUIRE(expected==result);
@@ -219,7 +217,7 @@ TEST_CASE("qtvar::basic prune","[weight=1][part=qtvar]"){
     t1.prune(3000);
     PNG result = t1.render();
 
-    // result.writeToFile("images/out/given-adaPrune-var.png");
+    result.writeToFile("images/out/given-adaPrune-var.png");
 
     PNG expected; 
     expected.readFromFile("images/soln/given-adaPrune-var.png");
