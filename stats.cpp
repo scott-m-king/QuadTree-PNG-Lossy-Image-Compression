@@ -97,9 +97,9 @@ long stats::getSumHelper(const vector<vector<long>>& sums, pair<int,int> ul, int
   int lrCol = ul.second + pow(2,dim)-1;
   long lr = sums[lrRow][lrCol];
 
-  long leftSub = 0;
-  long upSub = 0; 
-  long cornerSub = 0;
+  int leftSub = 0;
+  int upSub = 0; 
+  int cornerSub = 0;
 
   if (ul.first != 0) upSub = sums[lrRow-subAmount][lrCol];
   if (ul.second != 0) leftSub = sums[lrRow][lrCol-subAmount];
@@ -117,17 +117,17 @@ long stats::rectArea(int dim) {
 // given a rectangle, compute its sum of squared deviations from mean, over all color channels.
 // see written specification for a description of this function.
 double stats::getVar(pair<int,int> ul, int dim){
-  long red = getSumSq('r', ul, dim) - (pow(getSum('r', ul, dim),2) / rectArea(dim));
-  long green = getSumSq('g', ul, dim) - (pow(getSum('g', ul, dim),2) / rectArea(dim));
-  long blue = getSumSq('b', ul, dim) - (pow(getSum('b', ul, dim),2) / rectArea(dim));
+  double red = getSumSq('r', ul, dim) - (pow(getSum('r', ul, dim),2) / rectArea(dim));
+  double green = getSumSq('g', ul, dim) - (pow(getSum('g', ul, dim),2) / rectArea(dim));
+  double blue = getSumSq('b', ul, dim) - (pow(getSum('b', ul, dim),2) / rectArea(dim));
 
   return red + green + blue;
 }
 
 RGBAPixel stats::getAvg(pair<int,int> ul, int dim){
-  long red = getSum('r', ul, dim) / rectArea(dim);
-  long green = getSum('g', ul, dim) / rectArea(dim);
-  long blue = getSum('b', ul, dim) / rectArea(dim);
+  double red = getSum('r', ul, dim) / rectArea(dim);
+  double green = getSum('g', ul, dim) / rectArea(dim);
+  double blue = getSum('b', ul, dim) / rectArea(dim);
 
   return RGBAPixel(red, green, blue);
 }

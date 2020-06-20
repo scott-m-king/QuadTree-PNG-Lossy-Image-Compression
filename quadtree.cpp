@@ -75,14 +75,10 @@ PNG quadtree::render() {
 }
 
 void quadtree::renderHelper(PNG & img, Node * root) {
-	if (root->NE == NULL && root->NW == NULL && root->SE == NULL && root->SW == NULL) {
+	if (root->NW == NULL) {
 		for (int row = root->upLeft.first; row < root->upLeft.first + pow(2,root->dim); row++) {
 			for (int col = root->upLeft.second; col < root->upLeft.second + pow(2,root->dim); col++) {
-				RGBAPixel* curr = img.getPixel(row, col);
-				curr->r = root->avg.r;
-				curr->g = root->avg.g;
-				curr->b = root->avg.b;
-				curr->a = root->avg.a;
+				*(img.getPixel(row, col)) = root->avg;
 			}
 		}
 	} else {
@@ -94,22 +90,27 @@ void quadtree::renderHelper(PNG & img, Node * root) {
 }
 
 int quadtree::idealPrune(int leaves) {
-	double lo = 0;
-	double hi = root->var;
-	double mid;
+	int lo = 1;
+	int hi = root->var;
+	int result = 0;
 
 	while (hi > lo) {
-		mid = lo + (hi - lo) / 2;
+		int mid = lo + (hi - lo) / 2;
 		int pruneAmount = pruneSize(mid);
 		
-		if (pruneAmount == leaves) break; 
-		if (pruneAmount > leaves) lo = mid + 1;
-		if (pruneAmount < leaves) hi = mid - 1;
+		if (pruneAmount <= leaves) {
+			result = mid;	
+			hi = mid - 1;
+		}
+		
+		if (pruneAmount > leaves) {
+			lo = mid + 1;
+		}
 	}
 
-	while (pruneSize(mid) > leaves) mid++;
+	if (pruneSize(result-1) <= leaves) return result-1;
 
-	return mid;
+	return result;
 }
 
 int quadtree::pruneSize(int tol) {
