@@ -27,7 +27,7 @@ int main()
 	PNG origIm3;
 	origIm3.readFromFile("images/orig/stanley-totem-poles.png");
 	PNG origIm4;
-	origIm4.readFromFile("images/orig/network.png");
+	origIm4.readFromFile("images/orig/leaf.png");
 	// PNG origIm5;
 	// origIm5.readFromFile("images/orig/network.png");
 	// PNG origIm6;
@@ -51,7 +51,7 @@ int main()
 	tCopy1.prune(10000); 
 	tCopy2.prune(10000); 
 	tCopy3.prune(3000); 
-	tCopy4.prune(15000);
+	tCopy4.prune(tCopy4.idealPrune(10000));
 	// tCopy5.prune(10000);
 	// tCopy6.prune(10000);
 
@@ -90,7 +90,7 @@ int main()
 	vCopy1.prune(10000); 
 	vCopy2.prune(10000); 
 	vCopy3.prune(3000); 
-	vCopy4.prune(80000); 
+	vCopy4.prune(vCopy4.idealPrune(10000)); 
 	// vCopy5.prune(10000);
 	// vCopy6.prune(30000);
 	

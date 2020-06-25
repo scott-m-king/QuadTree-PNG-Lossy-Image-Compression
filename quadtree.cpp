@@ -90,13 +90,13 @@ void quadtree::renderHelper(PNG & img, Node * root) {
 }
 
 int quadtree::idealPrune(int leaves) {
-	int lo = 1;
-	int hi = root->var;
-	int result = 0;
-
+	long lo = 0;
+	long hi = root->var;
+	long result = 0;
+	
 	while (hi > lo) {
-		int mid = lo + (hi - lo) / 2;
-		int pruneAmount = pruneSize(mid);
+		long mid = lo + (hi - lo) / 2;
+		long pruneAmount = pruneSize(mid);
 		
 		if (pruneAmount <= leaves) {
 			result = mid;	
