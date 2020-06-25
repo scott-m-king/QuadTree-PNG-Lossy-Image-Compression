@@ -16,6 +16,9 @@ Completed as a programming assignment for UBC CPSC 221 - Basic Data Structures a
 ### Ideal Prune
 - We used a binary search approach to "optimize" our compression strategies by finding the minimum tolerance needed to produce an image with x number of squares. This allows the user to choose the quality of the output in a more predictable way than using tolerance (colour variance can vary greatly across images). 
 
+![alt text](https://github.com/scott-m-king/cpsc221-pa3/blob/master/images/out/Ada.png?raw=true)
+![alt text](https://github.com/scott-m-king/cpsc221-pa3/blob/master/images/out/leaf.png?raw=true)
+
 ## What I learned
 - Dynamic programming concepts allowed us to avoid costly recalculation of colour variance for each subsquare by populating 2D vectors for each colour channel (RGB values) and using previously calculated values and matrix positions to calculate subsquare variance and average colour information in constant time. If we were to make these calculations on an ad-hoc basis without storing precalculated information, it would come at a cost of quadratic running time per calculation. 
 
