@@ -97,9 +97,9 @@ long stats::getSumHelper(const vector<vector<long>>& sums, pair<int,int> ul, int
   int lrCol = ul.second + pow(2,dim)-1;
   long lr = sums[lrRow][lrCol];
 
-  int leftSub = 0;
-  int upSub = 0; 
-  int cornerSub = 0;
+  long leftSub = 0;
+  long upSub = 0; 
+  long cornerSub = 0;
 
   if (ul.first != 0) upSub = sums[lrRow-subAmount][lrCol];
   if (ul.second != 0) leftSub = sums[lrRow][lrCol-subAmount];
