@@ -5,7 +5,7 @@ A program to compress PNG images based on a calculation of average colour differ
 Completed as a programming assignment for UBC CPSC 221 - Basic Data Structures and Algorithms. 
 
 ## Compression Strategies
-*When a tree is pruned, all of the pixels contained in the tree are replaced a pixel whose colour is a calculation the average color across all the children before the prune.* 
+*When a tree is pruned, all of the pixels contained in the subsquare are replaced with pixels whose colour is a calculation of the average color across all the children before the prune.* 
 
 ### The Leaf Test
 - Prunes off all of a subtree's children if the sum of squared differences between the root's color variance and all of its leaves' color variance is less than or equal to the tolerance (a parameter used to compare against a node's stored color variance information)
